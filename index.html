@@ -1,27 +1,8 @@
-<!-- npx http-server . -->
 <!DOCTYPE html>
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
     <title>Hello, WebAssembly!</title>
-    <script>
-      const imports = {
-        env: {
-          date_now: Date.now,
-        },
-      };
-      const wasm =
-        "./target/wasm32-unknown-unknown/release/wasm_dev_book_hello_wasm.wasm";
-      fetch(wasm)
-        .then((response) => response.arrayBuffer())
-        // `WebAssembly.instantiate` の引数に `imports` を追加
-        .then((bytes) => WebAssembly.instantiate(bytes, imports))
-        .then((results) => {
-          const { add, get_timestamp } = results.instance.exports;
-          console.log(add(1, 2));
-          // 追加
-          console.log(get_timestamp());
-        });
-    </script>
+    <script type="module" src="loadWasm.js"></script>
   </head>
 </html>
