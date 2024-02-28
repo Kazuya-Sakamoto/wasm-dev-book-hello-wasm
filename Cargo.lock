@@ -3,5 +3,13 @@
 version = 3
 
 [[package]]
+name = "tinymt"
+version = "0.1.0"
+source = "git+https://github.com/mizdra/rust-tinymt?tag=0.1.0#ca4f4830b9260d829536a3eef8a77aa810ce643a"
+
+[[package]]
 name = "wasm-dev-book-hello-wasm"
 version = "0.1.0"
+dependencies = [
+ "tinymt",
+]

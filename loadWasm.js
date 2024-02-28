@@ -1,20 +1,33 @@
-// npx http-server .
-
 const imports = {
   env: {
     date_now: Date.now,
   },
 };
-
-const wasm =
+const WASM_PATH =
   "./target/wasm32-unknown-unknown/release/wasm_dev_book_hello_wasm.wasm";
 
-fetch(wasm)
-  .then((response) => response.arrayBuffer())
-  .then((bytes) => WebAssembly.instantiate(bytes, imports))
-  .then((results) => {
-    const { add, get_timestamp } = results.instance.exports;
+const formatTimestamp = (timestamp) => {
+  const date = new Date(timestamp);
+  return date.toLocaleString();
+};
+
+const toUint32 = (num) => num >>> 0;
+
+const useWasm = async () => {
+  try {
+    const response = await fetch(WASM_PATH);
+    const bytes = await response.arrayBuffer();
+    const results = await WebAssembly.instantiate(bytes, imports);
+
+    const { add, get_timestamp, rand } = results.instance.exports;
     console.log(add(1, 2));
-    // 追加
-    console.log(get_timestamp());
-  });
+    console.log(formatTimestamp(get_timestamp()));
+    console.log(toUint32(rand()));
+  } catch (error) {
+    console.error("Wasm loading and use failed:", error);
+  }
+};
+
+(() => {
+  useWasm();
+})();
